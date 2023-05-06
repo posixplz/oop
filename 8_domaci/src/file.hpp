@@ -1,13 +1,11 @@
 class File : public std::fstream
 {
 private:
-	std::string fname;
-	// static const std::size_t max_line_size;
-	// std::array<char, max_line_size> line_buffer;
+	std::string fname_;
+	void reopen(std::ios::openmode);
 public:
-	File(std::string filename);
-	
+	File(std::string fname);
 	const std::string& getFilename() const;
-	void set(const std::string& filename);
-	void reset();
+	void set(const std::string& fname);
+	void erase();
 };

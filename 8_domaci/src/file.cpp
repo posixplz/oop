@@ -4,23 +4,26 @@
 
 using namespace std;
 
-static constexpr auto mode = ios::in | ios::out | ios::app;
+static constexpr auto default_mode = ios::in | ios::out | ios::app;
 
-File::File(string filename) : fstream(filename, mode), fname(filename) {}
+File::File(string fname) : fstream(fname, default_mode), fname_(fname) {}
 
 const string& File::getFilename() const {
-	return fname;
+	return fname_;
 }
 
-void File::set(const string& filename) {
-	fname = filename;
-	clear();
+void File::reopen(ios::openmode mode) {
 	if (is_open())
 		close();
-	open(fname, mode);
+	open(fname_, mode);
 }
 
-void File::reset() {
-	clear();
-	seekg(0);
+void File::set(const string& fname) {
+	fname_ = fname;
+	reopen(default_mode);
+}
+
+void File::erase() {
+	reopen(ios::out | ios::trunc);
+	reopen(default_mode);
 }
