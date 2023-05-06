@@ -2,29 +2,20 @@
 #include <fstream>
 #include <string>
 #include "file.hpp"
+#include "matrica.hpp"
+#include <cstring>
+
 using namespace std;
 
-int main() {
-	string s;
-	File f("proba");
 
-	//f << "1 2 3\n";
-	//f << "4 5 6\n";
-	//f << "7 8 9\n";
-
-	f >> skipws;
-	f >> s;
-	cout << s;
-	/*
-	f.reset();
-	stringstream line;
-	for (; getline(f, line);) {
-		while (line >> s)
-			cout << s;
-		cout << '\n';
+int main(int argc, char **argv) {
+	File fa("matricaA.txt");
+	File fb("matricaB.txt");
+	File fc("matricaC.txt");
+	if (!strcmp(argv[0], "init")) {
+		init();
+	} else {
 	}
-	*/
-
 	return 0;
 }
 
