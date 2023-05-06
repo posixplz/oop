@@ -6,7 +6,8 @@ LDFLAGS		=
 
 SRC = $(wildcard *.cpp)
 HDR = $(wildcard *.hpp)
-GCH = $(addsuffix .gch, ${HDR})
+#GCH = $(addsuffix .gch, ${HDR})
+GCH = matrica.hpp.gch
 OBJ = $(addprefix ${BUILDDIR}/, $(SRC:.cpp=.o))
 DEP = $(wildcard ${BUILDDIR}/*.d)
 
