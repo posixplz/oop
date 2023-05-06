@@ -4,4 +4,4 @@ Za `argc == 1 || argv[1] != "init"` program pravi random 5x5 matrice A i B, appe
 Header template matrice `matrica.hpp` je namenjen da se prikompajluje, malo je poveci.
 
 # TODO
-1. izmena imena var u `matrica.hpp`
+1. srediti imena var u `matrica.hpp`
