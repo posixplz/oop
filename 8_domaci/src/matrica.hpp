@@ -13,8 +13,8 @@ private:
 	std::vector<std::vector<T>> m;
 	std::array<std::size_t, 2> d;
 public:
-	std::string fieldseparator = "\t";
-	std::string recordseparator = "\n";
+	std::string fieldSeparator = "\t";
+	std::string recordSeparator = "\n";
 	std::string endOfData = "\n\n";
 
 	Matrica();
@@ -48,6 +48,9 @@ public:
 	Matrica& operator= (const Matrica&);
 	std::vector<T>& operator[] (std::size_t);
 	Matrica operator* (const Matrica&) const;
+	Matrica& operator<< (const T&);
+	Matrica& operator<< (const char);
+	void pop();
 	
 	void jedinicna();
 	T kofaktor(std::size_t red, std::size_t kolona) const;
@@ -74,7 +77,7 @@ std::ostream& operator<< (std::ostream& os, const Matrica<T>& matrica);
 //-----------------------------------------------------------------------------
 
 template<typename T>
-Matrica<T>::Matrica() {}
+Matrica<T>::Matrica() : m(1, std::vector<T>()), d({1,0}) {}
 
 template<typename T>
 Matrica<T>::Matrica(std::array<std::size_t, 2> arg)
@@ -115,12 +118,12 @@ void Matrica<T>::print(std::ostream& os) const {
 	for (auto i = m.size(); const auto& kolona : m) {
 		for (auto j = kolona.size(); const auto& element : kolona) {
 			os << element;
-			if (--j && !fieldseparator.empty()) {
-				os << fieldseparator;
+			if (--j && !fieldSeparator.empty()) {
+				os << fieldSeparator;
 			}
 		}
-		if (--i && !recordseparator.empty())
-			os << recordseparator;
+		if (--i && !recordSeparator.empty())
+			os << recordSeparator;
 	}	
 	if (!endOfData.empty())
 		os << endOfData;
@@ -225,13 +228,13 @@ void Matrica<T>::jedinicna() {
 
 template<typename T>
 Matrica<T> Matrica<T>::operator*(const Matrica& B) const {
-	if (d[kolona] != B.d[redova])
+	if (get(kolona) != B.get(redova))
 		throw "Matrice nisu odgovarajuceg formata.";
-	Matrica<T> out(d[kolona], B.d[redova]);
-	for (std::size_t i=0; i<d[redova]; i++) {
-		for (std::size_t j=0; j<B.d[kolona]; j++) {
+	Matrica<T> out(get(kolona), B.get(redova));
+	for (std::size_t i=0; i<get(redova); i++) {
+		for (std::size_t j=0; j<B.get(kolona); j++) {
 			out[i][j] = 0;
-			for (int k=0; k<m; k++) {
+			for (std::size_t k=0; k<get(redova); k++) {
 			out[i][j] += get(i, k) * B.get(k, j);
 			}
 		}
@@ -352,4 +355,29 @@ template<typename T>
 std::ostream& operator<< (std::ostream& os, const Matrica<T>& matrica) {
 	matrica.print(os);
 	return os;
+}
+
+template<typename T>
+Matrica<T>& Matrica<T>::operator<< (const T& val) {
+	m.back().push_back(val);
+	d[kolona] = m.back().size();
+	return *this;
+}
+
+template<typename T>
+Matrica<T>& Matrica<T>::operator<< (const char c) {
+	switch (c) {
+		case '\n':
+			m.push_back(std::vector<T>());
+			++d[redova];
+			break;
+	}
+	return *this;
+}
+
+template<typename T>
+void Matrica<T>::pop() {
+	m.pop_back();
+	m.shrink_to_fit();
+	--d[redova];
 }
