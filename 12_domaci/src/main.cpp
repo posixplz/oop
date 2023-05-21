@@ -20,7 +20,7 @@
 #include <sstream>
 
 #define FILEPATH	"../Kraj vecnosti - Isaac Asimov.txt"
-#define RS_MS_BYTE	0xc4
+#define RS_LSBYTE	0xc4
 
 namespace sp = sciplot;
 
@@ -50,7 +50,7 @@ int main() {
 	std::map<karakter, unsigned long> raspodela;
 
 	while (file.get(k.c)) {
-		if ((unsigned char) k.c >= RS_MS_BYTE) {
+		if ((unsigned char) k.c >= RS_LSBYTE) {
 			file.get(d);
 			k.set_ms_byte(d);
 		} else {
@@ -75,7 +75,7 @@ int main() {
 	std::stringstream ss;
 
 	for (std::size_t i=0; const auto& [ch, num] : raspodela) {
-		if ((unsigned char) ch.c >= RS_MS_BYTE) {
+		if ((unsigned char) ch.c >= RS_LSBYTE) {
 			auto [m, n] = ch.wget();
 			std::cout << m << n;
 			ss << m << n;
