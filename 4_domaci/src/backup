@@ -1,0 +1,27 @@
+ELF		= a.out
+OBJDIR		= obj
+CXX		= g++
+CXXFLAGS 	= -pedantic -Wall -Wextra -std=c++20 -g3
+LDFLAGS		=
+
+SRC = $(wildcard *.cpp)
+OBJ = $(addprefix ${OBJDIR}/,$(SRC:.cpp=.o))
+
+${ELF}: ${OBJ}
+	${CXX} ${LDFLAGS} -o $@ ${OBJ}
+
+${OBJ}: ${OBJDIR}/%.o: %.cpp Makefile | ${OBJDIR}
+	${CXX} -c ${CXXFLAGS} $< -o $@
+
+${OBJDIR}:
+	mkdir -p ${OBJDIR}
+
+clean:
+	rm -rf ${OBJDIR} ${ELF}
+
+run: ${ELF}
+	./${ELF}
+
+r: run
+
+.PHONY: clean run r
